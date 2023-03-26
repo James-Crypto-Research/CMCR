@@ -39,5 +39,9 @@ get_currency_map <- function(api_key = Sys.getenv("CMC_API_KEY")){
       start <- start + 10000
     }
   }
+  # clean up the data a bit
+  the_return <- the_return |> mutate(
+    first_historical_data = lubridate::ymd_hms(first_historical_data),
+    last_historical_data = lubridate::ymd_hms(last_historical_data))
   return(the_return)
 }
