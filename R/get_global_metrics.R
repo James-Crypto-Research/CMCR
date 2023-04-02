@@ -39,7 +39,7 @@ get_global_metrics <- function(time_start=NULL,time_end=NULL,
     x$date <- as.Date(x$date)
   }
   # Now clean up the output a bit
-  x <- x |> select(date,btc_dominance,eth_dominance,
+  x <- x |> dplyr::select(date,btc_dominance,eth_dominance,
                    active_cryptocurrencies,active_exchanges,active_market_pairs,
                    quote.USD.total_market_cap,quote.USD.total_volume_24h,
                    quote.USD.total_volume_24h_reported,
