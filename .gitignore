@@ -48,3 +48,10 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 R/.DS_Store
+.idea/CMCR.iml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/rGraphicsSettings.xml
+.idea/rSettings.xml
+.idea/vcs.xml
