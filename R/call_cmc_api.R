@@ -5,7 +5,7 @@
 #'  and adds defaults all the
 #'
 #' @param path The path to pass to the API URL
-#' @param params a set of parameters to pass the API.
+#' @param ... a \emph{named} list of parameters to pass to the endpoint
 #'
 #' @return a parsed list from the JSON structure
 #'
@@ -15,7 +15,9 @@
 #' x <- call_glassnode_api()
 #' }
 #' @noRd
-call_cmc_api <- function(path, params) {
+call_cmc_api <- function(path, ...) {
+  tmp <- list(...)
+  params <- do.call(make_params, tmp)
   tmp_url <- httr::modify_url("https://pro-api.coinmarketcap.com/", query=params,path = path)
   resp <- httr::GET(url = tmp_url)
   if (httr::http_error(resp)) {
@@ -26,7 +28,10 @@ call_cmc_api <- function(path, params) {
       msg
     )
   }
-  parsed <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = TRUE)
+  parsed <- httr::content(resp, "text", encoding = "UTF-8")
 
   return(parsed)
 }
+
+
+
