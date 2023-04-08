@@ -28,9 +28,13 @@ call_cmc_api <- function(path, ...) {
       msg
     )
   }
-  parsed <- httr::content(resp, "text", encoding = "UTF-8")
+  parsed <- httr::content(resp, "text", encoding = "UTF-8") |>
+    jsonlite::fromJSON()
+  if (parsed[[1]]$error_code != 0){
+    error(glue::glue("Error: ",tmp[[1]]$error_message))
+  }
 
-  return(parsed)
+  return(parsed$data)
 }
 
 
