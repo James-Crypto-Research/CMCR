@@ -1,3 +1,15 @@
+#' Get total credits available and remaining credits
+#'
+#' @param api_key
+#'
+#' @return a tibble that contains credits remain and amount used on a per minute and monthly basis.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   #Requires a valid API key to run
+#'   x <- get_key_metrics()
+#' }
 get_key_metrics <- function(api_key = Sys.getenv("CMC_API_KEY")){
   tmp <- call_cmc_api("/v1/key/info",api_key)
   spent <- tmp$usage |> tibble::as_tibble() |>
