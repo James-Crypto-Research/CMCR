@@ -21,17 +21,15 @@ get_global_metrics <- function(time_start=NULL,time_end=NULL,
   if (is.null(time_end)){
     time_end <- Sys.Date()
   }
-  tmp <- list("time_start" = time_start,
+  tmp <- list("path" = "/v1/global-metrics/quotes/historical",
+              "time_start" = time_start,
               "time_end" = time_end,
               "interval" = interval,
               "api_key" = api_key)
-  params <- do.call(make_params, tmp)
-  x <- call_cmc_api(
-    path = glue::glue("/v1/global-metrics/quotes/historical"), params
-  )
+  x <- do.call(call_cmc_api, tmp)
   # Below assumes we are only pulling USD quotes. This will break if
   # more quotes are used in conversion
-  x <- x$data$quotes |> tibble::as_tibble() |>
+  x <- x$quotes |> tibble::as_tibble() |>
     jsonlite::flatten() |>
     dplyr::mutate(date=as.POSIXct(timestamp,origin="1970-01-01 00:00:00",
                                   tz="UTC"))

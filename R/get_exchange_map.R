@@ -19,19 +19,17 @@ get_exchange_map <- function(api_key = Sys.getenv("CMC_API_KEY")){
   finished <- FALSE
   start <- 1
   while(!finished){
-    tmp <- list(listing_status = "active,inactive",
+    tmp <- list("path" = "/v1/exchange/map",
+                listing_status = "active,inactive",
                 "api_key" = api_key,
                 "start" = start)
-    params <- do.call(make_params, tmp)
-    x <- call_cmc_api(
-      path = glue::glue("/v1/exchange/map"), params
-    )
+    x <- do.call(call_cmc_api, tmp)
     # Below assumes we are only pulling USD quotes. This will break if
     # more quotes are used in conversion
-    x <- x$data |>
+    x <- x |>
       jsonlite::flatten() |> #flatten recursive JSON structures
       tibble::as_tibble() |>
-      select_all(~gsub("\\.","_",.)) #Replace . with _ in col names
+      dplyr::select_all(~gsub("\\.","_",.)) #Replace . with _ in col names
     the_return <- the_return |> dplyr::bind_rows(x)
     finished <- nrow(x) < 10000
     if (!finished){
@@ -39,7 +37,7 @@ get_exchange_map <- function(api_key = Sys.getenv("CMC_API_KEY")){
     }
   }
   # clean up the data a bit
-  the_return <- the_return |> mutate(
+  the_return <- the_return |> dplyr::mutate(
     first_historical_data = lubridate::ymd_hms(first_historical_data),
     last_historical_data = lubridate::ymd_hms(last_historical_data))
   return(the_return)
