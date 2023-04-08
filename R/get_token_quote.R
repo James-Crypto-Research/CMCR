@@ -31,18 +31,17 @@ get_token_quote <- function(token = "BTC",time_start=NULL,time_end=NULL,
   if (is.null(time_end)){
     time_end <- Sys.Date()
   }
-  tmp <- list("symbol" = token,
+  tmp <- list("path" = "v2/cryptocurrency/quotes/historical",
+              "symbol" = token,
               "time_start" = time_start,
               "time_end" = time_end,
               "interval" = interval,
               "api_key" = api_key)
-  params <- do.call(make_params, tmp)
-  x <- call_cmc_api(
-    path = glue::glue("v2/cryptocurrency/quotes/historical"), params
-  )
+  x <- do.call(call_cmc_api, tmp)
+  rm(tmp)
   # Below assumes we are only pulling USD quotes. This will break if
   # more quotes are used in conversion
-  tmp <- x$data |> tibble::as_tibble() |> jsonlite::flatten()
+  tmp <- x |> tibble::as_tibble() |> jsonlite::flatten()
   tmp <- tmp[[1]][[1]] |> jsonlite::flatten()
   # Now clean up the output a bit
   tmp <- tmp|> dplyr::select(timestamp,
@@ -63,5 +62,6 @@ get_token_quote <- function(token = "BTC",time_start=NULL,time_end=NULL,
   if (as_date & interval == "24h"){
     tmp$date <- as.Date(tmp$date)
   }
+  tmp <- tibble::as_tibble(tmp)
   return(tmp)
 }
