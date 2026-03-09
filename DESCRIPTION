@@ -1,11 +1,29 @@
 Package: CMCR
 Type: Package
-Title: What the Package Does (Title Case)
+Title: CoinMarketCap API Client for R
 Version: 0.2.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: person("James", "Chapman", email = "james@paymenteconomics.com",
+    role = c("aut", "cre"))
+Description: Provides functions to access the CoinMarketCap Pro API
+    (<https://pro.coinmarketcap.com/api/v1>). Includes endpoints for
+    cryptocurrency and exchange metadata, historical quotes, global
+    market metrics, DEX data, and fear and greed indices. All results
+    are returned as tidy tibbles.
+License: BSD_3_clause + file LICENSE
+URL: https://github.com/James-Crypto-Research/CMCR
+BugReports: https://github.com/James-Crypto-Research/CMCR/issues
+Depends: R (>= 4.1.0)
 Encoding: UTF-8
-LazyData: true
+LazyData: false
+Suggests:
+    testthat (>= 3.0.0)
+Imports:
+    dplyr,
+    glue,
+    httr,
+    jsonlite,
+    lubridate,
+    plyr,
+    tibble,
+    tidyr
+RoxygenNote: 7.3.3

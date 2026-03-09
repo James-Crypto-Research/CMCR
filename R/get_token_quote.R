@@ -18,12 +18,15 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#'   x <- get_token_quote("BTC", time_start = "2024-01-01", time_end = "2024-01-31")
+#' }
 get_token_quote <- function(token = "BTC",time_start=NULL,time_end=NULL,
                                interval="daily",
                                api_key = Sys.getenv("CMC_API_KEY"),
                                as_date=TRUE){
   if (length(token) != 1) {
-    error("Only one token can be grabbed at a time for the moment")
+    stop("Only one token can be grabbed at a time for the moment")
   }
   if (is.null(time_start)){
     time_start <- Sys.Date() -1
@@ -31,7 +34,7 @@ get_token_quote <- function(token = "BTC",time_start=NULL,time_end=NULL,
   if (is.null(time_end)){
     time_end <- Sys.Date()
   }
-  tmp <- list("path" = "v2/cryptocurrency/quotes/historical",
+  tmp <- list("path" = "/v2/cryptocurrency/quotes/historical",
               "symbol" = token,
               "time_start" = time_start,
               "time_end" = time_end,

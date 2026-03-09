@@ -12,30 +12,24 @@
 #' @examples
 #' \dontrun{
 #' # Need a valid API to run
-#' x <- call_glassnode_api()
+#' x <- call_cmc_api()
 #' }
 #' @noRd
 call_cmc_api <- function(path, ...) {
   tmp <- list(...)
   params <- do.call(make_params, tmp)
-  tmp_url <- httr::modify_url("https://pro-api.coinmarketcap.com/", query=params,path = path)
+  tmp_url <- httr::modify_url("https://pro-api.coinmarketcap.com/", query = params, path = path)
   resp <- httr::GET(url = tmp_url)
   if (httr::http_error(resp)) {
     msg <- glue::glue(
-      "Coinmarketcap API request failed ({httr::status_code(resp)})","\n", tmp_url
+      "Coinmarketcap API request failed ({httr::status_code(resp)})", "\n", tmp_url
     )
-    stop(
-      msg
-    )
+    stop(msg)
   }
   parsed <- httr::content(resp, "text", encoding = "UTF-8") |>
     jsonlite::fromJSON()
-  if (parsed[[1]]$error_code != 0){
-    error(glue::glue("Error: ",tmp[[1]]$error_message))
+  if (parsed$status$error_code != 0) {
+    stop(glue::glue("CMC API error: {parsed$status$error_message}"))
   }
-
   return(parsed$data)
 }
-
-
-

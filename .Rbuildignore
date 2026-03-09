@@ -1,2 +1,10 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.git$
+^\.gitignore$
+^\.github$
+^\.claude$
+^CLAUDE\.md$
+^README\.Rmd$
+^\.DS_Store$
+^codecov\.yml$

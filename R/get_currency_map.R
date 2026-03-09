@@ -11,7 +11,9 @@
 #' @export
 #'
 #' @examples
-#' x <- get_currency_map()
+#' \dontrun{
+#'   x <- get_currency_map()
+#' }
 get_currency_map <- function(api_key = Sys.getenv("CMC_API_KEY")){
   # We run this script in a loop since it is a paginated endpoint
   # The default is 10k entries. As long as the number of entries
@@ -20,9 +22,11 @@ get_currency_map <- function(api_key = Sys.getenv("CMC_API_KEY")){
   finished <- FALSE
   start <- 1
   while(!finished){
-    tmp <- list(listing_status = "active,inactive",
-                "api_key" = api_key,
-                "start" = start)
+    tmp <- list(
+      api_key = api_key,
+      listing_status = "active,inactive",
+      start = start
+    )
     params <- do.call(make_params, tmp)
     x <- call_cmc_api(
       path = glue::glue("/v1/cryptocurrency/map"), params
@@ -32,7 +36,7 @@ get_currency_map <- function(api_key = Sys.getenv("CMC_API_KEY")){
     x <- x$data |>
       jsonlite::flatten() |> #flatten recursive JSON structures
       tibble::as_tibble() |>
-      select_all(~gsub("\\.","_",.)) #Replace . with _ in col names
+      dplyr::rename_with(~gsub("\\.","_",.x)) #Replace . with _ in col names
     the_return <- the_return |> dplyr::bind_rows(x)
     finished <- nrow(x) < 10000
     if (!finished){
@@ -40,7 +44,7 @@ get_currency_map <- function(api_key = Sys.getenv("CMC_API_KEY")){
     }
   }
   # clean up the data a bit
-  the_return <- the_return |> mutate(
+  the_return <- the_return |> dplyr::mutate(
     first_historical_data = lubridate::ymd_hms(first_historical_data),
     last_historical_data = lubridate::ymd_hms(last_historical_data))
   return(the_return)

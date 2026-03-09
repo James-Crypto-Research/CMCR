@@ -40,7 +40,7 @@ sanitize_date <- function(the_date){
 #'
 #' TODO: add more error checking to this function
 #'
-#' @param api_key The API key to use. By default it will check the API_KEY environmental variable
+#' @param api_key The API key to use. By default it will check the CMC_API_KEY environmental variable
 #' @param ... A list of parameters for use
 #'
 #' @return A list of parameters ready to send to the GN API
@@ -60,4 +60,17 @@ make_params <- function(api_key=Sys.getenv("CMC_API_KEY"),...){
     params["time_end"] <- sanitize_date(params[["time_end"]])
   }
   return(params)
+}
+
+#' Collapse a character vector into a comma-separated string for API parameters
+#'
+#' @param x A character vector of symbols or values
+#'
+#' @return A single comma-separated character string
+#'
+#' @examples
+#' collapse_symbols(c("BTC", "ETH"))
+#' @noRd
+collapse_symbols <- function(x) {
+  paste(x, collapse = ",")
 }

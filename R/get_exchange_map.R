@@ -10,7 +10,9 @@
 #' @export
 #'
 #' @examples
-#' x <- get_exchange_map()
+#' \dontrun{
+#'   x <- get_exchange_map()
+#' }
 get_exchange_map <- function(api_key = Sys.getenv("CMC_API_KEY")){
   # We run this script in a loop since it is a paginated endpoint
   # The default is 10k entries. As long as the number of entries
@@ -29,7 +31,7 @@ get_exchange_map <- function(api_key = Sys.getenv("CMC_API_KEY")){
     x <- x |>
       jsonlite::flatten() |> #flatten recursive JSON structures
       tibble::as_tibble() |>
-      dplyr::select_all(~gsub("\\.","_",.)) #Replace . with _ in col names
+      dplyr::rename_with(~gsub("\\.","_",.x)) #Replace . with _ in col names
     the_return <- the_return |> dplyr::bind_rows(x)
     finished <- nrow(x) < 10000
     if (!finished){

@@ -1,6 +1,7 @@
 #' Get total credits available and remaining credits
 #'
-#' @param api_key
+#' @param api_key character. CMC Pro API key. Defaults to the
+#'   \code{CMC_API_KEY} environment variable.
 #'
 #' @return a tibble that contains credits remain and amount used on a per minute and monthly basis.
 #' @export
@@ -11,9 +12,9 @@
 #'   x <- get_key_metrics()
 #' }
 get_key_metrics <- function(api_key = Sys.getenv("CMC_API_KEY")){
-  tmp <- call_cmc_api("/v1/key/info",api_key)
+  tmp <- call_cmc_api("/v1/key/info", api_key = api_key)
   spent <- tmp$usage |> tibble::as_tibble() |>
-              tidyr::unnest_longer(everything()) |>
+              tidyr::unnest_longer(tidyr::everything()) |>
               dplyr::rename_with(~gsub("current_","",.x))
   limits <- tmp$plan |> tibble::as_tibble() |>
               dplyr::select(credit_limit_monthly,

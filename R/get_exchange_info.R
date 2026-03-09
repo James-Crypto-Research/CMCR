@@ -14,7 +14,9 @@
 #' @export
 #'
 #' @examples
-#'
+#' \dontrun{
+#'   x <- get_exchange_info(exchange_id = 2)
+#' }
 get_exchange_info <- function(exchange_id = 2, api_key = Sys.getenv("CMC_API_KEY")){
   tmp <- list("path" = "/v1/exchange/info",
               "id" = exchange_id,

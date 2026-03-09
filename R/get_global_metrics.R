@@ -10,7 +10,9 @@
 #' @export
 #'
 #' @examples
-#' x <- get_global_metrics()
+#' \dontrun{
+#'   x <- get_global_metrics()
+#' }
 get_global_metrics <- function(time_start=NULL,time_end=NULL,
                           interval="daily",
                           api_key = Sys.getenv("CMC_API_KEY"),
